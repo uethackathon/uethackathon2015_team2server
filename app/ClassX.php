@@ -13,7 +13,7 @@ class ClassX extends Model {
 		];
 
 	/**
-	 * Get Class name by id
+	 * Get class name by id
 	 *
 	 * @param $id
 	 *
@@ -30,6 +30,13 @@ class ClassX extends Model {
 		return $class->khoa . $class->lop;
 	}
 
+	/**
+	 * Get id class by class name
+	 *
+	 * @param $class_name
+	 *
+	 * @return bool|int
+	 */
 	public static function getIdByClassName( $class_name ) {
 		$classXes = ClassX::all();
 
@@ -46,6 +53,13 @@ class ClassX extends Model {
 		return false;
 	}
 
+	/**
+	 * Get number students of class
+	 *
+	 * @param $id
+	 *
+	 * @return int
+	 */
 	public static function getCountStudentByClassId( $id ) {
 		$users = User::all()->where( 'class', $id );
 
