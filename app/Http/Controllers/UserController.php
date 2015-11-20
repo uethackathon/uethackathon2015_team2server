@@ -35,6 +35,22 @@ class UserController extends Controller {
 		$response = new stdClass();
 
 		/**
+		 * Xử lý tài khoản VNU - Đăng ký học
+		 */
+		$user_vnu = $all['mssv'];
+		$pass_vnu = $all['password'];
+
+		$login_vnu = getTimeTableVNU( $user_vnu, $pass_vnu );
+		if ( $login_vnu === false ) {
+			$response->error     = true;
+			$response->error_msg = 'Mã sinh viên hoặc mật khẩu không đúng!';
+
+			return response()->json( $response );
+		}
+
+		$user_name = $login_vnu['name'];
+
+		/**
 		 * Xử lý lớp khóa học
 		 */
 		$classX   = $all['lop'];
@@ -67,6 +83,8 @@ class UserController extends Controller {
 			'msv'      => $all['mssv'],
 			'class'    => $id_class,
 			'type'     => $type,
+			'name'     => $user_name,
+			'pass_uet' => $pass_vnu,
 		] );
 
 		$response->error    = false;

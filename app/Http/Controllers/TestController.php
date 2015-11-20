@@ -9,7 +9,7 @@ use App\Http\Requests;
 
 class TestController extends Controller {
 	public function test_helper() {
-		dd( getTimeTableVNU( '13020355', 's4r3kt' ) );
+		dd( getTimeTableVNU( '13020499', 'hhw95mrt' ) );
 	}
 
 	public function seedDataClassX_es() {
