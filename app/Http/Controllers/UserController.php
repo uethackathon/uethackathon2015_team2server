@@ -35,6 +35,19 @@ class UserController extends Controller {
 		$response = new stdClass();
 
 		/**
+		 * Tìm user đã tồn tại chưa?
+		 */
+		$user = User::all()->where( 'email', $all['email'] );
+
+		if ( $user->count() > 0 ) {//Đã tồn tại người dùng
+			$response->error     = true;
+			$response->error_msg = 'Đã tồn tại người dùng với email '
+			                       . $all['email'];
+
+			return response()->json( $response );
+		}
+
+		/**
 		 * Xử lý tài khoản VNU - Đăng ký học
 		 */
 		$user_vnu = $all['mssv'];
@@ -59,19 +72,6 @@ class UserController extends Controller {
 		if ( $id_class == false ) {//Lớp khóa học không tồn tại
 			$response->error     = true;
 			$response->error_msg = 'Lớp khóa học không tồn tại';
-
-			return response()->json( $response );
-		}
-
-		/**
-		 * Tìm user đã tồn tại chưa?
-		 */
-		$user = User::all()->where( 'email', $all['email'] );
-
-		if ( $user->count() > 0 ) {//Đã tồn tại người dùng
-			$response->error     = true;
-			$response->error_msg = 'Đã tồn tại người dùng với email '
-			                       . $all['email'];
 
 			return response()->json( $response );
 		}
