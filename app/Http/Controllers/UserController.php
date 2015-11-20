@@ -7,9 +7,17 @@ use DateTimeZone;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use stdClass;
 
 class UserController extends Controller {
+	/**
+	 * API Register
+	 *
+	 * @param Request $request
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function register( Request $request ) {
 		onlyAllowPostRequest( $request );
 
@@ -19,10 +27,6 @@ class UserController extends Controller {
 			'mssv',
 			'lop',
 		] );
-
-//		if ( $all['type'] == '' || ! isset( $all['type'] ) ) {
-//			$all['type'] = 'student';
-//		}
 
 		/**
 		 * Dữ liệu trả về
@@ -70,6 +74,13 @@ class UserController extends Controller {
 		return response()->json( $response );
 	}
 
+	/**
+	 * API Login
+	 *
+	 * @param Request $request
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function login( Request $request ) {
 		onlyAllowPostRequest( $request );
 
@@ -122,5 +133,65 @@ class UserController extends Controller {
 		$response->user = $user_x;
 
 		return response()->json( $response );
+	}
+
+	public function update( Request $request ) {
+		onlyAllowPostRequest( $request );
+
+		$all = $request->only( [
+			'email',
+			'name',
+			'mssv',
+			'lop',
+		] );
+
+		/**
+		 * Dữ liệu trả về
+		 */
+		$response = new stdClass();
+
+		$users = DB::table( 'users' )->where( 'email', $all['email'] );
+
+		if ( $users->count() == 0 ) {
+			$response->error     = true;
+			$response->error_msg = 'Đã có lỗi gì đó xảy ra ở server!';
+
+			return response()->json( $response );
+		}
+
+		$updated = $users->update( [
+			'name'  => $all['name'],
+			'msv'   => $all['mssv'],
+			'class' => $all['lop'],
+		] );
+
+		if ( $updated == 0 ) {
+			$response->error     = true;
+			$response->error_msg = 'Cập nhật không có gì thay đổi!';
+
+			return response()->json( $response );
+		}
+
+		$user = $users->first();
+
+		$response->error    = false;
+		$response->uid      = $user->id;
+		$user_x             = new stdClass();
+		$user_x->name       = $user->name;
+		$user_x->email      = $user->email;
+		$user_x->type       = $user->type;
+		$user_x->lop        = $user->class;
+		$user_x->mssv       = $user->msv;
+		$user_x->created_at = date_create( $user->created_at )
+			->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
+			->format( 'Y-m-d H:m:i' );
+		$user_x->updated_at = date_create( $user->updated_at )
+			->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
+			->format( 'Y-m-d H:m:i' );
+
+		$response->user = $user_x;
+
+		return response()->json( $response );
+
 	}
 }
