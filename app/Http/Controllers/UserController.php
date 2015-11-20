@@ -84,7 +84,7 @@ class UserController extends Controller {
 			'class'    => $id_class,
 			'type'     => $type,
 			'name'     => $user_name,
-			'pass_uet' => $pass_vnu,
+			'pass_uet' => base64_encode( $pass_vnu ),
 		] );
 
 		$response->error    = false;
