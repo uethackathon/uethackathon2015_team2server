@@ -8,6 +8,6 @@ use App\Http\Requests;
 
 class TestController extends Controller {
 	public function test_helper() {
-		test();
+		getTimeTableVNU( '13020499', 'hhw95mrt' );
 	}
 }

@@ -21,6 +21,8 @@ Route::group( [ 'prefix' => 'v1' ], function () {
 	Route::any( 'register', 'UserController@register' );
 
 	Route::any( 'update', 'UserController@update' );
+
+
 } );
 
 

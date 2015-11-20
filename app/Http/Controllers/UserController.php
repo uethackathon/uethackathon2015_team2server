@@ -135,6 +135,13 @@ class UserController extends Controller {
 		return response()->json( $response );
 	}
 
+	/**
+	 * Update information user
+	 *
+	 * @param Request $request
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function update( Request $request ) {
 		onlyAllowPostRequest( $request );
 
@@ -192,6 +199,5 @@ class UserController extends Controller {
 		$response->user = $user_x;
 
 		return response()->json( $response );
-
 	}
 }
