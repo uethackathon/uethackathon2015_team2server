@@ -45,4 +45,10 @@ class ClassX extends Model {
 
 		return false;
 	}
+
+	public static function getCountStudentByClassId( $id ) {
+		$users = User::all()->where( 'class', $id );
+
+		return $users->count();
+	}
 }

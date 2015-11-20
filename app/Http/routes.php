@@ -16,6 +16,10 @@ Route::get( '/', function () {
 } );
 
 Route::group( [ 'prefix' => 'v1' ], function () {
+	Route::group( [ 'prefix' => 'classX' ], function () {
+		Route::any( 'byId', 'ClassXController@getClassXById' );
+	} );
+
 	Route::any( 'login', 'UserController@login' );
 
 	Route::any( 'register', 'UserController@register' );
