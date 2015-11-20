@@ -217,7 +217,7 @@ class UserController extends Controller {
 		}
 
 		$updated = $users->update( [
-			'name'  => $all['name'],
+			'name'  => ucwords( $all['name'] ),
 			'msv'   => $all['mssv'],
 			'class' => $id_class,
 		] );
