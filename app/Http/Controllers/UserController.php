@@ -173,11 +173,27 @@ class UserController extends Controller {
 		 */
 		$response = new stdClass();
 
+		/**
+		 * Xử lý lớp khóa học
+		 */
+		$classX   = $all['lop'];
+		$id_class = ClassX::getIdByClassName( $classX );
+
+		if ( $id_class == false ) {//Lớp khóa học không tồn tại
+			$response->error     = true;
+			$response->error_msg = 'Lớp khóa học không tồn tại';
+
+			return response()->json( $response );
+		}
+
+		/**
+		 * Tìm user bằng email
+		 */
 		$users = DB::table( 'users' )->where( 'email', $all['email'] );
 
 		if ( $users->count() == 0 ) {
 			$response->error     = true;
-			$response->error_msg = 'Đã có lỗi gì đó xảy ra ở server!';
+			$response->error_msg = 'Đã có lỗi gì đó xảy ra!';
 
 			return response()->json( $response );
 		}
@@ -185,7 +201,7 @@ class UserController extends Controller {
 		$updated = $users->update( [
 			'name'  => $all['name'],
 			'msv'   => $all['mssv'],
-			'class' => $all['lop'],
+			'class' => $id_class,
 		] );
 
 		if ( $updated == 0 ) {
@@ -203,7 +219,7 @@ class UserController extends Controller {
 		$user_x->name       = $user->name;
 		$user_x->email      = $user->email;
 		$user_x->type       = $user->type;
-		$user_x->lop        = $user->class;
+		$user_x->lop        = ClassX::getClassName( $user->class );
 		$user_x->mssv       = $user->msv;
 		$user_x->created_at = date_create( $user->created_at )
 			->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
