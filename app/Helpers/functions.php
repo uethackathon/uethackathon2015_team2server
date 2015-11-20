@@ -45,7 +45,7 @@ function getTimeTableVNU( $user, $pass ) {
 		'Password'                   => $pass,
 		'__RequestVerificationToken' => $verti,
 	];
-	$browser->post( $url, $field, 1, 1 );
+	$browser->post( $url, $field, 1, 0 );
 
 	$contentX = $browser->return;
 
@@ -66,10 +66,6 @@ function getTimeTableVNU( $user, $pass ) {
 		$source_html )[1];
 	$timeTable = explode( '</table>', $timeTable )[0];
 
-	return handleSourceTimeTable( $timeTable );
-}
-
-function handleSourceTimeTable( $timeTable ) {
 	$trs       = explode( '<tr>', $timeTable );
 	$count_str = count( $trs );
 
@@ -85,5 +81,16 @@ function handleSourceTimeTable( $timeTable ) {
 		$arrLMH[] = $maLMH;
 	}
 
-	return $arrLMH;
+	/**
+	 * Lấy tên sinh viên
+	 */
+	$name = explode( 'Chào mừng: ', $contentX )[1];
+	$name = explode( '<', $name )[0];
+	$name = trim( $name );
+	$name = html_entity_decode( $name );
+
+	return [
+		'timeTable' => $arrLMH,
+		'name'      => $name,
+	];
 }

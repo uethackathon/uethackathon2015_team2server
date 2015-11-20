@@ -15,5 +15,6 @@ class VerifyCsrfToken extends BaseVerifier {
 			'v1/login',
 			'v1/register',
 			'v1/update',
+			'v1/classX/byId',
 		];
 }

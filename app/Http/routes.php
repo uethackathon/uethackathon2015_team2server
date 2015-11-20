@@ -16,14 +16,19 @@ Route::get( '/', function () {
 } );
 
 Route::group( [ 'prefix' => 'v1' ], function () {
+	Route::group( [ 'prefix' => 'classX' ], function () {
+		Route::any( 'byId', 'ClassXController@getClassXById' );
+	} );
+
 	Route::any( 'login', 'UserController@login' );
 
 	Route::any( 'register', 'UserController@register' );
 
 	Route::any( 'update', 'UserController@update' );
-
-
 } );
 
 
+Route::group( [ 'prefix' => 'seed' ], function () {
+	Route::get( 'class_ex', 'TestController@seedDataClassX_es' );
+} );
 Route::get( 'test', 'TestController@test_helper' );
