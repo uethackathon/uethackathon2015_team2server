@@ -16,8 +16,18 @@ Route::get( '/', function () {
 } );
 
 Route::group( [ 'prefix' => 'v1' ], function () {
+	/**
+	 * ClassX
+	 */
 	Route::group( [ 'prefix' => 'classX' ], function () {
 		Route::any( 'byId', 'ClassXController@getClassXById' );
+	} );
+
+	/**
+	 * Post
+	 */
+	Route::group( [ 'prefix' => 'post' ], function () {
+		Route::any( 'classX', 'PostController@postToClassX' );
 	} );
 
 	Route::any( 'login', 'UserController@login' );
@@ -27,8 +37,14 @@ Route::group( [ 'prefix' => 'v1' ], function () {
 	Route::any( 'update', 'UserController@update' );
 } );
 
-
+/**
+ * Seed databases
+ */
 Route::group( [ 'prefix' => 'seed' ], function () {
-	Route::get( 'class_ex', 'TestController@seedDataClassX_es' );
+	Route::get( 'classX', 'SeedDataController@seedDataClassX_es' );
 } );
+
+/**
+ * Test
+ */
 Route::get( 'test', 'TestController@test_helper' );
