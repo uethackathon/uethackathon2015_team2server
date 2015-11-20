@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ClassX;
 use App\User;
 use DateTimeZone;
 use Illuminate\Http\Request;
@@ -33,9 +34,25 @@ class UserController extends Controller {
 		 */
 		$response = new stdClass();
 
+		/**
+		 * Xử lý lớp khóa học
+		 */
+		$classX   = $all['lop'];
+		$id_class = ClassX::getIdByClassName( $classX );
+
+		if ( $id_class == false ) {//Lớp khóa học không tồn tại
+			$response->error     = true;
+			$response->error_msg = 'Lớp khóa học không tồn tại';
+
+			return response()->json( $response );
+		}
+
+		/**
+		 * Tìm user đã tồn tại chưa?
+		 */
 		$user = User::all()->where( 'email', $all['email'] );
 
-		if ( $user->count() > 0 ) {
+		if ( $user->count() > 0 ) {//Đã tồn tại người dùng
 			$response->error     = true;
 			$response->error_msg = 'Đã tồn tại người dùng với email '
 			                       . $all['email'];
@@ -43,15 +60,13 @@ class UserController extends Controller {
 			return response()->json( $response );
 		}
 
-		$isOfficer = 0;//Mặc định là sinh viên không phải là cán bộ lớp
-		$type      = 'student';//Mặc định người dùng đăng ký là sinh viên
-		$user      = User::create( [
-			'email'     => $all['email'],
-			'password'  => md5( $all['password'] ),
-			'msv'       => $all['mssv'],
-			'class'     => $all['lop'],
-			'type'      => $type,
-			'isOfficer' => $isOfficer,
+		$type = 'student';//Mặc định người dùng đăng ký là sinh viên
+		$user = User::create( [
+			'email'    => $all['email'],
+			'password' => md5( $all['password'] ),
+			'msv'      => $all['mssv'],
+			'class'    => $id_class,
+			'type'     => $type,
 		] );
 
 		$response->error    = false;
@@ -60,7 +75,7 @@ class UserController extends Controller {
 		$user_x->name       = $user->getAttribute( 'name' );
 		$user_x->email      = $user->getAttribute( 'email' );
 		$user_x->type       = $user->getAttribute( 'type' );
-		$user_x->lop        = $user->getAttribute( 'class' );
+		$user_x->lop        = ClassX::getClassName( $id_class );
 		$user_x->mssv       = $user->getAttribute( 'msv' );
 		$user_x->created_at = $user->getAttribute( 'created_at' )
 		                           ->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
