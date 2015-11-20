@@ -47,6 +47,12 @@ function getTimeTableVNU( $user, $pass ) {
 	];
 	$browser->post( $url, $field, 1, 1 );
 
+	$contentX = $browser->return;
+
+	if ( strpos( $contentX, '/Account/Logout' ) === false ) {
+		return false;
+	}
+
 	/**
 	 * Lấy source trang thời khóa biểu
 	 */
@@ -59,16 +65,25 @@ function getTimeTableVNU( $user, $pass ) {
 		       = explode( '<table style="border:none; width: 100%; border-collapse:collapse;">',
 		$source_html )[1];
 	$timeTable = explode( '</table>', $timeTable )[0];
-	$timeTable = '<table>' . $timeTable . '</table>';
 
-	$html = new simple_html_dom();
-	$html->load( $timeTable );
-
-	$tr = $html->find( 'tr' );
-
-	print_r( $tr );
+	return handleSourceTimeTable( $timeTable );
 }
 
-function handleSourceTimeTable( $source ) {
+function handleSourceTimeTable( $timeTable ) {
+	$trs       = explode( '<tr>', $timeTable );
+	$count_str = count( $trs );
 
+	$arrLMH = [ ];
+
+	for ( $i = 2; $i < $count_str - 1; $i ++ ) {
+		$tr = $trs[ $i ];
+
+		$maLMH = explode( '<td', $tr )[7];
+		$maLMH = explode( '</td>', $maLMH )[0];
+		$maLMH = explode( '&nbsp;', $maLMH )[1];
+
+		$arrLMH[] = $maLMH;
+	}
+
+	return $arrLMH;
 }
