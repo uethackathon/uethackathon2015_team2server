@@ -66,10 +66,6 @@ function getTimeTableVNU( $user, $pass ) {
 		$source_html )[1];
 	$timeTable = explode( '</table>', $timeTable )[0];
 
-	return handleSourceTimeTable( $timeTable );
-}
-
-function handleSourceTimeTable( $timeTable ) {
 	$trs       = explode( '<tr>', $timeTable );
 	$count_str = count( $trs );
 
