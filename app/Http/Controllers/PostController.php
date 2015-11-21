@@ -131,38 +131,7 @@ class PostController extends Controller {
 			/**
 			 * Post
 			 */
-			$p              = new stdClass();
-			$p->id          = $post->id;
-			$p->title       = $post->title;
-			$p->content     = $post->content;
-			$p->base        = $post->base;
-			$p->group       = $post->group;
-			$p->isIncognito = intval( $post->isIncognito );
-			$p->create_at   = date_create( $post->created_at )
-				->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
-				->format( 'Y-m-d H:m:i' );
-			$p->updated_at  = date_create( $post->updated_at )
-				->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
-				->format( 'Y-m-d H:m:i' );
-
-			$author_id = $post->author;
-			/**
-			 * Author
-			 */
-			$user = User::getInfoById( intval( $author_id ) );
-			if ( $user == null ) {//Không tồn tại người dùng
-				$response->error     = true;
-				$response->error_msg = 'Đã có lỗi gì đó xảy ra!';
-
-				return response()->json( $response );
-			}
-
-			$p->author = $user;
-
-			/**
-			 * Comments
-			 */
-
+			$p         = Post::getPostInfoById( $post->id );
 			$arrPost[] = $p;
 		}
 
