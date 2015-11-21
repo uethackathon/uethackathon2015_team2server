@@ -51,7 +51,7 @@ class Comment extends Model {
 
 		$listComments = [ ];
 		foreach ( $comments as $comment ) {
-			$listComments = Comment::getCommentInfoById( $comment->id );
+			$listComments[] = Comment::getCommentInfoById( $comment->id );
 		}
 
 		return $listComments;
