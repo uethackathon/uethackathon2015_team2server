@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use stdClass;
 
 class User extends Model implements AuthenticatableContract,
 	AuthorizableContract,
@@ -44,4 +45,29 @@ class User extends Model implements AuthenticatableContract,
 	 * @var array
 	 */
 	protected $hidden = [ 'password', 'remember_token' ];
+
+	/**
+	 * Get user object by id
+	 *
+	 * @param $id
+	 *
+	 * @return null|stdClass
+	 */
+	public static function getInfoById( $id ) {
+		$users = User::all()->where( 'id', intval( $id ) );
+
+		if ( $users->count() == 0 ) {
+			return null;
+		}
+
+		$user     = $users->first();
+		$u        = new stdClass();
+		$u->id    = $user->id;
+		$u->name  = $user->name;
+		$u->email = $user->email;
+		$u->type  = $user->type;
+		$u->mssv  = $user->msv;
+
+		return $u;
+	}
 }

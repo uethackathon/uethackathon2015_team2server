@@ -28,12 +28,35 @@ Route::group( [ 'prefix' => 'v1' ], function () {
 	 */
 	Route::group( [ 'prefix' => 'post' ], function () {
 		Route::any( 'classX', 'PostController@postToClassX' );
+
+		/**
+		 * Post comment
+		 */
+		Route::group( [ 'prefix' => 'comment' ], function () {
+			Route::any( 'classX', 'CommentController@commentToClassX' );
+		} );
 	} );
 
+	/**
+	 * Get post
+	 */
+	Route::group( [ 'prefix' => 'get' ], function () {
+		Route::any( 'classX', 'PostController@getFromClassX' );
+	} );
+
+	/**
+	 * Login
+	 */
 	Route::any( 'login', 'UserController@login' );
 
+	/**
+	 * Register
+	 */
 	Route::any( 'register', 'UserController@register' );
 
+	/**
+	 * Update
+	 */
 	Route::any( 'update', 'UserController@update' );
 } );
 

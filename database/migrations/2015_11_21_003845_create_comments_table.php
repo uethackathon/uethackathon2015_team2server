@@ -3,23 +3,20 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostsTable extends Migration {
+class CreateCommentsTable extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up() {
-		Schema::create( 'posts', function ( Blueprint $table ) {
+		Schema::create( 'comments', function ( Blueprint $table ) {
 			$table->increments( 'id' );
 
-			$table->string( 'title' );
 			$table->string( 'content' );
-			$table->integer( 'group' );//Nằm trong lớp nào
+			$table->integer( 'post' );
 			$table->integer( 'author' );
-			$table->boolean( 'isIncognito' )->default( 0 );
-			$table->string( 'type' )->default( 'post' );
-			$table->string( 'base' );//Nằm trong bảng nào?
+			$table->boolean( 'confirmed' )->default( 0 );
 
 			$table->timestamps();
 		} );
@@ -31,6 +28,6 @@ class CreatePostsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::drop( 'posts' );
+		Schema::drop( 'comments' );
 	}
 }
