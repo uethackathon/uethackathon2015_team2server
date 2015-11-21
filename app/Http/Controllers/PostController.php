@@ -67,6 +67,7 @@ class PostController extends Controller {
 		$response->title       = $post->title;
 		$response->content     = $post->content;
 		$response->base        = $post->base;
+		$response->group        = $post->group;
 		$response->isIncognito = intval( $post->isIncognito );
 		$response->create_at   = date_create( $post->created_at )
 			->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
