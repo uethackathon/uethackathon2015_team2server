@@ -12,6 +12,13 @@ use App\Http\Requests;
 use stdClass;
 
 class PostController extends Controller {
+	/**
+	 * Post to ClassX
+	 *
+	 * @param Request $request
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function postToClassX( Request $request ) {
 		onlyAllowPostRequest( $request );
 
@@ -49,6 +56,8 @@ class PostController extends Controller {
 		$u->type  = $user->type;
 		$u->email = $user->email;
 
+		$response->author = $u;
+
 		/**
 		 * Tạo post mới
 		 */
@@ -67,7 +76,7 @@ class PostController extends Controller {
 		$response->title       = $post->title;
 		$response->content     = $post->content;
 		$response->base        = $post->base;
-		$response->group        = $post->group;
+		$response->group       = $post->group;
 		$response->isIncognito = intval( $post->isIncognito );
 		$response->create_at   = date_create( $post->created_at )
 			->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
@@ -76,11 +85,16 @@ class PostController extends Controller {
 			->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
 			->format( 'Y-m-d H:m:i' );
 
-		$response->author = $u;
-
 		return response()->json( $response );
 	}
 
+	/**
+	 * Get posts form classX
+	 *
+	 * @param Request $request
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function getFromClassX( Request $request ) {
 		onlyAllowPostRequest( $request );
 
@@ -92,7 +106,7 @@ class PostController extends Controller {
 		 */
 		$response = new stdClass();
 
-		$classXes = ClassX::all()->where( 'id', $id_classX );
+		$classXes = ClassX::all()->where( 'id', intval( $id_classX ) );
 		if ( $classXes->count() == 0 ) {//Không tồn tại lớp học này
 			$response->error     = true;
 			$response->error_msg = 'Đã có lỗi gì đó xảy ra!';
@@ -100,23 +114,59 @@ class PostController extends Controller {
 			return response()->json( $response );
 		}
 
-		$postClassXes = Post::all()->where( 'base', $base );
+		$postClassXes = Post::all()->where( 'base', $base )
+		                    ->where( 'group', intval( $id_classX ) );
 		if ( $postClassXes->count() == 0 ) {//Chưa có bài viết nào
 			$response->error     = true;
 			$response->error_msg = 'Chưa có bài viết nào trong lớp!';
 
 			return response()->json( $response );
 		}
-		dd( $postClassXes );
 
 		/**
 		 * Danh sách các bài viết
 		 */
 		$arrPost = [ ];
 		foreach ( $postClassXes as $index => $post ) {
+			/**
+			 * Post
+			 */
+			$p              = new stdClass();
+			$p->id          = $post->id;
+			$p->title       = $post->title;
+			$p->content     = $post->content;
+			$p->base        = $post->base;
+			$p->group       = $post->group;
+			$p->isIncognito = intval( $post->isIncognito );
+			$p->create_at   = date_create( $post->created_at )
+				->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
+				->format( 'Y-m-d H:m:i' );
+			$p->updated_at  = date_create( $post->updated_at )
+				->setTimezone( new DateTimeZone( 'Asia/Ho_Chi_Minh' ) )
+				->format( 'Y-m-d H:m:i' );
 
+			$author_id = $post->author;
+			/**
+			 * Author
+			 */
+			$user = User::getInfoById( intval( $author_id ) );
+			if ( $user == null ) {//Không tồn tại người dùng
+				$response->error     = true;
+				$response->error_msg = 'Đã có lỗi gì đó xảy ra!';
+
+				return response()->json( $response );
+			}
+
+			$p->author = $user;
+
+			/**
+			 * Comments
+			 */
+
+			$arrPost[] = $p;
 		}
 
+		$response->posts = $arrPost;
 
 		return response()->json( $response );
 	}

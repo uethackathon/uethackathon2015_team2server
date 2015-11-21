@@ -28,6 +28,13 @@ Route::group( [ 'prefix' => 'v1' ], function () {
 	 */
 	Route::group( [ 'prefix' => 'post' ], function () {
 		Route::any( 'classX', 'PostController@postToClassX' );
+
+		/**
+		 * Post comment
+		 */
+		Route::group( [ 'prefix' => 'comment' ], function () {
+			Route::any( 'classX', 'CommentController@commentToClassX' );
+		} );
 	} );
 
 	Route::group( [ 'prefix' => 'get' ], function () {
