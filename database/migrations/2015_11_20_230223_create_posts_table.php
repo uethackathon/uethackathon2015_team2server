@@ -15,6 +15,7 @@ class CreatePostsTable extends Migration {
 
 			$table->string( 'title' );
 			$table->string( 'content' );
+			$table->integer( 'group' );//Nằm trong lớp nào
 			$table->integer( 'author' );
 			$table->boolean( 'isIncognito' )->default( 0 );
 			$table->string( 'type' )->default( 'post' );

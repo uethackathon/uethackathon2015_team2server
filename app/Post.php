@@ -11,6 +11,7 @@ class Post extends Model {
 			'title',
 			'content',
 			'author',
+			'group',
 			'isIncognito',
 			'base',
 			'type',

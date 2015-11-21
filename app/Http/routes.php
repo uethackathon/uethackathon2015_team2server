@@ -30,6 +30,10 @@ Route::group( [ 'prefix' => 'v1' ], function () {
 		Route::any( 'classX', 'PostController@postToClassX' );
 	} );
 
+	Route::group( [ 'prefix' => 'get' ], function () {
+		Route::any( 'classX', 'PostController@getFromClassX' );
+	} );
+
 	Route::any( 'login', 'UserController@login' );
 
 	Route::any( 'register', 'UserController@register' );
