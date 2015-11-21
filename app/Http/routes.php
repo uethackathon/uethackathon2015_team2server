@@ -37,14 +37,26 @@ Route::group( [ 'prefix' => 'v1' ], function () {
 		} );
 	} );
 
+	/**
+	 * Get post
+	 */
 	Route::group( [ 'prefix' => 'get' ], function () {
 		Route::any( 'classX', 'PostController@getFromClassX' );
 	} );
 
+	/**
+	 * Login
+	 */
 	Route::any( 'login', 'UserController@login' );
 
+	/**
+	 * Register
+	 */
 	Route::any( 'register', 'UserController@register' );
 
+	/**
+	 * Update
+	 */
 	Route::any( 'update', 'UserController@update' );
 } );
 

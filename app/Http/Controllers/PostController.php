@@ -135,6 +135,7 @@ class PostController extends Controller {
 			$arrPost[] = $p;
 		}
 
+		$response->error = false;
 		$response->posts = $arrPost;
 
 		return response()->json( $response );

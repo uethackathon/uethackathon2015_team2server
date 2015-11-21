@@ -16,6 +16,7 @@ class CreateCommentsTable extends Migration {
 			$table->string( 'content' );
 			$table->integer( 'post' );
 			$table->integer( 'author' );
+			$table->boolean( 'confirmed' )->default( 0 );
 
 			$table->timestamps();
 		} );

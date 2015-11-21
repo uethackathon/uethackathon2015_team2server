@@ -12,6 +12,7 @@ class Comment extends Model {
 			'content',
 			'author',
 			'post',
+			'confirmed',
 		];
 
 	/**
@@ -27,11 +28,12 @@ class Comment extends Model {
 			return null;
 		}
 
-		$comment    = $comments->first();
-		$c          = new stdClass();
-		$c->id      = $comment->id;
-		$c->content = $comment->content;
-		$c->author  = User::getInfoById( $comment->author );
+		$comment      = $comments->first();
+		$c            = new stdClass();
+		$c->id        = $comment->id;
+		$c->content   = $comment->content;
+		$c->confirmed = intval( $comment->confirmed );
+		$c->author    = User::getInfoById( $comment->author );
 
 		return $c;
 	}
